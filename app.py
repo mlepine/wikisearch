@@ -1,11 +1,13 @@
 from flask import Flask
 from wikisearch.views import wikisearch
+from wikisearch.search import initialize_search
 
 CONFIGS = {
     'production': 'config.ProdConfig',
     'testing': 'config.TestConfig',
     'development': 'config.DevConfig'
 }
+
 
 def create_app():
     app = Flask(__name__)

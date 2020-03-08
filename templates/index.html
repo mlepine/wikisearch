@@ -1,5 +1,36 @@
 {% extends "base.html" %}
 {% block title %}Hello world!{% endblock %}
 {% block body %}
-  <h1>Hello WikiSearch</h1>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 my-3">
+        WikiSearch
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <form method="GET">
+          <div class="input-group">
+            <input class="form-control form-control-lg" type="text" placeholder="Search..." name="q" value="{{q}}">
+            <span class="input-group-btn">
+              <button type="submit" class="btn btn-primary btn-lg">Search</button>
+            </span>
+          </div>
+        </form>
+      </div>
+    </div>
+    {% for doc in docs %}
+      <div class="row mt-4">
+        <div class="col-12">
+          <h3>
+            {{ doc.doc.doc.title }}
+            <span class="small">{{ '%.3f'|format(doc.score) }}</span>
+          </h3>
+        </div>
+        <div class="col-12">
+            {{doc.doc.doc.extract[0:500]}}...
+        </div>
+      </div>
+    {% endfor %}
+  </div>
 {% endblock %}

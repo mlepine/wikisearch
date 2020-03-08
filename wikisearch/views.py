@@ -1,6 +1,7 @@
-from flask import jsonify
-from flask import Blueprint, render_template
-from flask import current_app as app
+from flask import (
+    jsonify, Blueprint, render_template, current_app as app, request, abort
+)
+from wikisearch.search import search_index
 
 
 wikisearch = Blueprint('wikisearch', __name__)
@@ -8,10 +9,34 @@ wikisearch = Blueprint('wikisearch', __name__)
 
 @wikisearch.route('/')
 def index():
-    app.logger.info('Loading index.html')
-    return render_template('index.html')
+    q = request.args.get('q') or ''
+    docs = []
+    if q:
+        app.logger.info(f'Searching for "{q}"')
+        docs = search_index.search(q)
+        app.logger.info(f'Found {len(docs)} results')
+    return render_template('index.html', q=q, count=len(docs), docs=docs)
 
 
 @wikisearch.route('/api/search')
 def search():
-    return  jsonify({'search': 'Hello API'})
+    q = request.args.get('q')
+    if q:
+        app.logger.info(f'Searching for "{q}"')
+        docs = search_index.search(q)
+        app.logger.info(f'Found {len(docs)} results')
+        return jsonify({'results': docs, 'count': len(docs)})
+    return jsonify([])
+
+
+@wikisearch.route('/api/docs')
+def list_docs():
+    return jsonify(search_index._docs)
+
+
+@wikisearch.route('/api/docs/<int:doc_id>')
+def get_doc(doc_id):
+    try:
+        return jsonify(search_index._docs[doc_id])
+    except IndexError:
+        abort(404)
