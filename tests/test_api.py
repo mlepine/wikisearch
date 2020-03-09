@@ -24,5 +24,5 @@ class TestAPI(BaseTest):
             self.assertEquals(results['count'], 10)
             self.assertEquals(round(results['results'][0]['score'], 3), 0.093)
             self.assertEquals(
-                results['results'][0]['doc']['doc']['title'], 'Macintosh startup'
+                results['results'][0]['doc']['title'], 'Macintosh startup'
             )

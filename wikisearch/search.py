@@ -66,21 +66,19 @@ class SearchIndex:
             if token.isalpha() and token not in self.stopwords
         )
 
-    def add_doc(self, doc, text_fn=None):
-        if not text_fn:
-            def text_fn(x): return x
-        text = text_fn(doc)
-        tokens = list(self.tokenize(text))
+    def add_doc(self, doc):
+        tokens = list(self.tokenize(doc['text']))
         termfreq = sorted((
             [len(list(it)), token]
             for token, it in groupby(sorted(tokens))
         ), reverse=True)
-        doc = {
+        # shallow copy doc
+        doc = {**doc}
+        doc.update({
             'id': len(self._docs),
             'termfreq': termfreq,
             'tokens': tokens,
-            'doc': doc
-        }
+        })
         self._docs.append(doc)
         for i, token in enumerate(tokens):
             token = self.stemmer.stem(token)
@@ -93,7 +91,7 @@ class SearchIndex:
             (doc['id'], len(docs), position)
             for docs in results for position, doc in docs
         )
-        # Group results by id
+        # Group docs together
         results = groupby(results, key=lambda x: x[0])
 
         ret = []
@@ -112,7 +110,11 @@ def initialize_search():
     logger.info('Indexing articles')
     idx = SearchIndex()
     for article in articles:
-        idx.add_doc(article, lambda x: x['extract'])
+        idx.add_doc({
+            'title': article['title'],
+            'pageid': article['pageid'],
+            'text': article['extract']
+        })
     logger.info('Finished Indexing articles')
     return idx
 

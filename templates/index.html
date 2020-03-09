@@ -12,24 +12,38 @@
         <form method="GET">
           <div class="input-group">
             <input class="form-control form-control-lg" type="text" placeholder="Search..." name="q" value="{{q}}">
-            <span class="input-group-btn">
+            <div class="input-group-append">
               <button type="submit" class="btn btn-primary btn-lg">Search</button>
-            </span>
+            </div>
           </div>
         </form>
       </div>
     </div>
     {% for doc in docs %}
       <div class="row mt-4">
-        <div class="col-12">
+        <div class="col-12 col-md-9">
           <h3>
-            {{ doc.doc.doc.title }}
+            {{ doc.doc.title }}
             <span class="small">{{ '%.3f'|format(doc.score) }}</span>
           </h3>
         </div>
         <div class="col-12">
-            {{doc.doc.doc.extract[0:500]}}...
+            {{doc.doc.text[0:500]}}...
         </div>
+        <div class="col-12 mt-2">
+          <h4>Top Terms:</h4>
+        </div>
+        {% for i in range(4) %}
+          <div class="col-3">
+            <ul>
+              {% for freq, term in doc.doc.termfreq[i*5:i*5+5] %}
+                <li>
+                  {{freq}} {{term}}
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endfor %}
       </div>
     {% endfor %}
   </div>
