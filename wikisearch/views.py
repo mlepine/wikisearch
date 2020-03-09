@@ -40,3 +40,15 @@ def get_doc(doc_id):
         return jsonify(search_index._docs[doc_id])
     except IndexError:
         abort(404)
+
+
+@wikisearch.route('/api/index')
+def index_stats():
+    return jsonify({
+        'documents_count': len(search_index._docs),
+        'terms_count': len(search_index._index),
+        'top_terms': sorted(
+            ([term, len(docs)] for term, docs in search_index._index.items()),
+            reverse=True, key=lambda x: x[1]
+        )[:20]
+    })

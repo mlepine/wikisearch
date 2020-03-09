@@ -1,6 +1,6 @@
 # WikiSearch
 
-Randomly pulls documents from Wikipedia, indexes them and provides an REST api for searching.
+Randomly pulls documents from Wikipedia, indexes them and provides a REST api for searching.
 
 App setup:
 
@@ -26,8 +26,11 @@ Lists documents matching the search query (q) and with a relevancy score.
 [/api/docs](http://localhost:5000/api/docs)
 Lists all documents.
 
-[/apo/docs/{id}](http://localhost:5000/api/docs/1)
+[/api/docs/{id}](http://localhost:5000/api/docs/1)
 Returns a document with the given id.
+
+[/api/index](http://localhost:5000/api/index)
+Returns the status of the search index
 
 [Demo App](http://localhost:5000/)
 An demo app for testing the search.
