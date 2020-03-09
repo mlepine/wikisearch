@@ -1,6 +1,12 @@
+import logging
 from flask import Flask
+from flask.logging import default_handler
 from wikisearch.views import wikisearch
 from wikisearch.search import initialize_search
+
+root_logger = logging.getLogger()
+root_logger.addHandler(default_handler)
+
 
 CONFIGS = {
     'production': 'config.ProdConfig',

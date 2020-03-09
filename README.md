@@ -1,5 +1,8 @@
 App setup:
 
+    pyenv install 3.7.4
+    mkvirtualenv wikisearch -p ~/.pyenv/versions/3.7.4/bin/python
+    workon wikisearch
     pip install -r requirements.txt
     python -m nltk.downloader stopwords
 

@@ -1,11 +1,15 @@
 import requests
 import random
 import nltk
+import logging
 from flask import g
 from werkzeug.local import LocalProxy
 from itertools import chain, groupby
 from collections import defaultdict
 from nltk.stem.snowball import EnglishStemmer
+
+
+logger = logging.getLogger(__name__)
 
 
 API_URL = 'https://en.wikipedia.org/w/api.php'
@@ -103,10 +107,13 @@ class SearchIndex:
 
 
 def initialize_search():
+    logger.info('Fetching articles')
     articles = fetch_articles()
+    logger.info('Indexing articles')
     idx = SearchIndex()
     for article in articles:
         idx.add_doc(article, lambda x: x['extract'])
+    logger.info('Finished Indexing articles')
     return idx
 
 
