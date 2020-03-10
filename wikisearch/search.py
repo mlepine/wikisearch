@@ -13,6 +13,8 @@ logger = logging.getLogger(__name__)
 
 
 API_URL = 'https://en.wikipedia.org/w/api.php'
+HEADERS = {
+    'User-Agent': 'WikiSearch/0.1 (https://github.com/mlepine/wikisearch) python-requests/2.3.3'}
 
 
 def search_articles():
@@ -23,7 +25,7 @@ def search_articles():
         'srsearch': 'startups',
         'srlimit': 100
     }
-    resp = requests.get(API_URL, params=params).json()
+    resp = requests.get(API_URL, headers=HEADERS, params=params).json()
     return resp['query']['search']
 
 
@@ -37,7 +39,7 @@ def fetch_article(pageid):
         'exlimit': 1,
         'explaintext': 1
     }
-    resp = requests.get(API_URL, params=params).json()
+    resp = requests.get(API_URL, headers=HEADERS, params=params).json()
     return resp['query']['pages'][0]
 
 
